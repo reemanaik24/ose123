@@ -1,0 +1,116 @@
+[OSEv3:vars]
+
+###########################################################################
+### Ansible Vars
+###########################################################################
+timeout=60
+ansible_become=yes
+ansible_ssh_user=root
+
+###########################################################################
+### OpenShift Basic Vars
+###########################################################################
+
+deployment_type=openshift-enterprise
+containerized=false
+# openshift_metrics_image_version=v3.7
+# openshift_image_tag=v3.7
+# openshift_release=3.7.5.5
+# docker_version="1.13.6"
+
+# default project node selector
+osm_default_node_selector='env=infra'
+
+
+###########################################################################
+### OpenShift Optional Vars
+###########################################################################
+
+# Enable cockpit
+osm_use_cockpit=true
+osm_cockpit_plugins=['cockpit-kubernetes']
+
+###########################################################################
+### OpenShift Master Vars
+###########################################################################
+
+openshift_master_api_port=443
+openshift_master_console_port=443
+openshift_master_cluster_method=native
+openshift_master_cluster_hostname=104.211.154.71
+openshift_master_cluster_public_hostname=104.211.154.71
+openshift_master_default_subdomain=apps.104.211.154.71
+openshift_master_overwrite_named_certificates=True
+
+openshift_set_hostname=true
+
+###########################################################################
+### OpenShift Network Vars
+###########################################################################
+
+osm_cluster_network_cidr=10.1.0.0/16
+openshift_portal_net=172.30.0.0/16
+
+#os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
+os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
+
+
+###########################################################################
+### OpenShift Authentication Vars
+###########################################################################
+
+
+
+
+
+# htpasswd auth
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
+#openshift_master_identity_providers=[{'name': 'idm', 'challenge': 'true', 'login': 'true', 'kind': 'LDAPPasswordIdentityProvider', 'attributes': {'id': ['dn'], 'email': ['mail'], 'name': ['cn'], 'preferredUsername': ['uid']}, 'bindDN': 'uid=admin,cn=users,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com', 'bindPassword': 'r3dh4t1!', 'ca': '/etc/origin/master/ipa-ca.crt', 'insecure': 'false', 'url': 'ldap://ipa.shared.example.opentlc.com/cn=users,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com?uid?sub?(memberOf=cn=ocp-users,cn=groups,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com)'}]
+#openshift_master_ldap_ca_file=/root/ipa-ca.crt
+
+# Defining htpasswd users
+# openshift_master_htpasswd_users={'user1': '<pre-hashed password>', 'user2': '<pre-hashed password>'}
+# or
+openshift_master_htpasswd_file=/root/htpasswd.openshift
+
+
+
+###########################################################################
+### OpenShift Router and Registry Vars
+###########################################################################
+
+#openshift_hosted_router_selector='env=infra'
+openshift_hosted_router_replicas=1
+# openshift_hosted_router_certificate={"certfile": "/path/to/router.crt", "keyfile": "/path/to/router.key", "cafile": "/path/to/router-ca.crt"}
+
+openshift_hosted_registry_selector='env=infra'
+openshift_hosted_registry_replicas=1
+openshift_hosted_registry_storage_kind=nfs
+openshift_hosted_registry_storage_access_modes=['ReadWriteMany']
+openshift_hosted_registry_storage_nfs_directory=/srv/nfs
+openshift_hosted_registry_storage_nfs_options='*(rw,root_squash)'
+openshift_hosted_registry_storage_volume_name=registry
+openshift_hosted_registry_storage_volume_size=5Gi
+
+
+###########################################################################
+#### OpenShift Host Vars
+############################################################################
+
+[OSEv3:children]
+masters
+etcd
+nodes
+nfs
+
+[masters]
+104.211.154.71
+
+[etcd]
+104.211.154.71
+
+[nodes]
+104.211.154.71 openshift_node_labels="{'logging':'true', 'env':'infra'}"
+
+[nfs]
+104.211.154.71
