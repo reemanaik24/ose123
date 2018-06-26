@@ -115,7 +115,6 @@ nfs
 [nodes]
 104.211.154.71
 104.211.154.71 openshift_node_labels="{'logging':'True', 'openshift_schedulable':'True', 'env':'infra'}" openshift_schedulable=True
-104.211.154.71 openshift_node_labels="{'logging':'True', 'openshift_schedulable':'True', 'env':'infra'}" openshift_schedulable=True
 
 [nfs]
 104.211.154.71
