@@ -31,8 +31,8 @@ osm_cockpit_plugins=['cockpit-kubernetes']
 ###########################################################################
 ### OpenShift Master Vars
 ###########################################################################
-openshift_master_api_port=443
-openshift_master_console_port=443
+openshift_master_api_port=8443
+openshift_master_console_port=8443
 openshift_master_cluster_method=native
 openshift_master_cluster_hostname=104.211.154.71
 openshift_master_cluster_public_hostname=104.211.154.71
